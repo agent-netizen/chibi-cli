@@ -1,8 +1,7 @@
 package types
 
-type TokenNotFoundError struct {}
+type TokenNotFoundError struct{}
 
 func (t *TokenNotFoundError) Error() string {
-	return "token.json file not found"
+    return "token.json file not found"
 }
-

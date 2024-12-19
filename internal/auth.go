@@ -1,83 +1,88 @@
 package internal
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"io"
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
 
-	"github.com/CosmicPredator/chibi/types"
+    "github.com/CosmicPredator/chibi/types"
 )
 
-type AuthRequest struct {
-	clientId string
-	redirectUri string
-}
+type AuthRequest struct{}
 
 func (a AuthRequest) GetAuthURL() string {
-	return fmt.Sprintf(
-		"https://anilist.co/api/v2/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code",
-		a.clientId,
-		a.redirectUri,
-	)
+    return fmt.Sprintf(
+        "https://anilist.co/api/v2/oauth/authorize?client_id=%v&response_type=token",
+        CLIENT_ID,
+    )
 }
 
 func (a AuthRequest) Login(authCode string) error {
-	if err := saveAccessToken(&a, authCode); err != nil {
-		return err
-	}
+    if err := saveAccessToken(authCode); err != nil {
+        return err
+    }
 
-	return nil
+    return nil
 }
 
-func saveAccessToken(a *AuthRequest, authCode string) error {
-	client := NewAnilistClient()
+func saveAccessToken(authCode string) error {
+    client := NewAnilistClient()
+    tokenConfig := types.NewTokenConfig()
+    tokenConfig.AccessToken = authCode
 
-	body := map[string]string {
-		"grant_type": "authorization_code",
-		"client_id": a.clientId,
-		"client_secret": "pYCQmRe7KMEFaWTIzWPMPsMqSJOWhyGsjj06BNrO",
-		"redirect_uri": a.redirectUri,
-		"code": authCode,
-	}
+    query :=
+        `query {
+        Viewer {
+            id
+            name
+        }
+    }`
+    requestData, err := json.Marshal(map[string]string{"query": query})
+    if err != nil {
+        return err
+    }
 
-	jsonString, err := json.Marshal(body)
+    req, err := http.NewRequest("POST", client.ApiUrl, bytes.NewBuffer(requestData))
+    if err != nil {
+        return err
+    }
+    req.Header.Set("Content-Type", "application/json")
+    req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", authCode))
 
-	if err != nil {
-		return err
-	}
+    response, err := client.HttpClient.Do(req)
+    if err != nil {
+        return err
+    }
+    defer response.Body.Close()
 
-	response, err := client.HttpClient.Post(
-		"https://anilist.co/api/v2/oauth/token",
-		"application/json",
-		bytes.NewBuffer(jsonString),
-	)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-	
-	res, _ := io.ReadAll(response.Body)
+    responseBytes, err := io.ReadAll(response.Body)
+    if err != nil {
+        return err
+    }
 
-	var tokenConfig types.TokenConfig
-	err = json.Unmarshal(res, &tokenConfig)
+    var responseData struct {
+        Data struct {
+            Viewer struct {
+                Id   int    `json:"id"`
+                Name string `json:"name"`
+            } `json:"Viewer"`
+        } `json:"data"`
+    }
 
-	if err != nil {
-		return err
-	}
+    err = json.Unmarshal(responseBytes, &responseData)
+    if err != nil {
+        return err
+    }
 
-	err = tokenConfig.FlushToJsonFile()
+    tokenConfig.Username = responseData.Data.Viewer.Name
+    tokenConfig.UserId = responseData.Data.Viewer.Id
+    tokenConfig.FlushToJsonFile()
 
-	if err != nil {
-		return err
-	}
-	return nil
+    return nil
 }
-
 
 func NewAuthRequest() *AuthRequest {
-	return &AuthRequest{
-		clientId: "4593",
-		redirectUri: "https://anilist.co/api/v2/oauth/pin",
-	}
+    return &AuthRequest{}
 }
