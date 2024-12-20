@@ -13,7 +13,7 @@ func CheckIfTokenExists() {
 	if err := accessToken.ReadFromJsonFile(); err != nil {
 		fmt.Println(message)
 		os.Exit(0)
-    }
+	}
 
 	if accessToken.AccessToken == "" {
 		fmt.Println(message)
