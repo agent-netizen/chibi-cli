@@ -34,7 +34,7 @@ func (p *Profile) Get() error {
                 }
                 manga {
                     count
-                    minutesWatched
+                    chaptersRead
                 }
             }
             siteUrl
