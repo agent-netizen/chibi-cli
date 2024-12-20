@@ -2,11 +2,13 @@ package cmd
 
 import (
     "fmt"
+    "os"
     "strconv"
 
     "github.com/CosmicPredator/chibi/internal"
     "github.com/charmbracelet/lipgloss"
     "github.com/charmbracelet/lipgloss/table"
+    "github.com/charmbracelet/x/term"
     "github.com/spf13/cobra"
 )
 
@@ -50,6 +52,12 @@ func handleLs() {
         })
     }
 
+    // get size of terminal
+    tw, _, err := term.GetSize((os.Stdin.Fd()))
+    if err != nil {
+        ErrorMessage(err.Error())
+    }
+
     t := table.New().
         Border(lipgloss.NormalBorder()).
         BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("99"))).
@@ -62,7 +70,7 @@ func handleLs() {
             }
         }).
         Headers("ID", "TITLE", "PROGRESS").
-        Rows(rows...)
+        Rows(rows...).Width(tw)
 
     fmt.Println(t)
 }
