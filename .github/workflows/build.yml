@@ -18,29 +18,29 @@ jobs:
             - name: Upload win64
               uses: actions/upload-artifact@v4
               with: 
-                name: release-builds
+                name: winx64
                 path: build/chibi_x64_win.exe
             
             - name: Upload Apple Silicon
               uses: actions/upload-artifact@v4
               with: 
-                name: release-builds
+                name: apple_silicon
                 path: build/chibi_darwin_silicon
 
             - name: Upload Apple Intel
               uses: actions/upload-artifact@v4
               with: 
-                name: release-builds
+                name: apple_intel
                 path: build/chibi_darwin_intel
                 
             - name: Upload Debian
               uses: actions/upload-artifact@v4
               with: 
-                name: release-builds
+                name: debian
                 path: build/chibi_debain.deb
             
             - name: Upload Linux
               uses: actions/upload-artifact@v4
               with: 
-                name: release-builds
+                name: linux
                 path: build/chibi_x64_linux
