@@ -18,7 +18,7 @@ jobs:
             - name: Upload win64
               uses: actions/upload-artifact@v4
               with: 
-                name: winx64
+                name: win64
                 path: build/chibi_x64_win.exe
             
             - name: Upload Apple Silicon
