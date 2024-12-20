@@ -62,17 +62,17 @@ func handleLs() {
 		Border(lipgloss.NormalBorder()).
 		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("99"))).
 		StyleFunc(func(row, col int) lipgloss.Style {
-			switch {
-			case row == -1:
+			// style for table header row
+			if row == -1 {
 				return lipgloss.NewStyle().Foreground(lipgloss.Color("99")).Bold(true).Align(lipgloss.Center)
-			default:
-				{
-					if col == 1 {
-						return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2).Width(tw)
-					}
-					return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2)
-				}
 			}
+
+			// force title column to wrap by specifying terminal width
+			if col == 1 {
+				return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2).Width(tw)
+			}
+
+			return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2)
 		}).
 		Headers("ID", "TITLE", "PROGRESS").
 		Rows(rows...).Width(tw)
