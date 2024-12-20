@@ -66,7 +66,12 @@ func handleLs() {
             case row == -1:
                 return lipgloss.NewStyle().Foreground(lipgloss.Color("99")).Bold(true).Align(lipgloss.Center)
             default:
-                return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2)
+                {
+                    if col == 1 {
+                        return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2).Width(tw)
+                    }
+                    return lipgloss.NewStyle().Align(lipgloss.Center).PaddingLeft(2).PaddingRight(2)
+                }
             }
         }).
         Headers("ID", "TITLE", "PROGRESS").
