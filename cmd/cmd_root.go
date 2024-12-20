@@ -20,6 +20,7 @@ func Execute() {
         mediaSearchCmd,
         mediaListCmd,
         mediaUpdateCmd,
+        mediaAddCmd,
     )
     rootCmd.Execute()
 }

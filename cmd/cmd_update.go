@@ -9,6 +9,8 @@ import (
     "github.com/spf13/cobra"
 )
 
+
+//TODO: Update progress relatively. For example "+2", "-10" etc.,
 var progress int
 
 func handleUpdate(mediaId int) {
@@ -19,7 +21,7 @@ func handleUpdate(mediaId int) {
     }
 
     mediaUpdate := internal.NewMediaUpdate()
-    err := mediaUpdate.Get(mediaId, progress)
+    err := mediaUpdate.Get(false, mediaId, progress, "", "")
 
     if err != nil {
         fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
@@ -27,7 +29,7 @@ func handleUpdate(mediaId int) {
         ))
     }
     fmt.Println(
-        lipgloss.NewStyle().Foreground(lipgloss.Color("#00FF00")).Render(
+        SUCCESS_MESSAGE_TEMPLATE.Render(
             "Done ✅",
         ),
     )
