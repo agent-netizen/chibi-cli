@@ -36,7 +36,9 @@ func (a *AniListClient) ExecuteGraqhQL(query string, variables map[string]interf
     req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", accessToken.AccessToken))
     response, err := a.HttpClient.Do(req)
     if err != nil {
-        return err
+        return &types.HttpError{
+            StatusCode: response.StatusCode,
+        }
     }
     defer response.Body.Close()
 

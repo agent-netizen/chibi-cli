@@ -5,7 +5,6 @@ import (
     "strconv"
 
     "github.com/CosmicPredator/chibi/internal"
-    "github.com/charmbracelet/lipgloss"
     "github.com/spf13/cobra"
 )
 
@@ -14,19 +13,18 @@ import (
 var progress int
 
 func handleUpdate(mediaId int) {
+    CheckIfTokenExists()
     if progress == 0 {
-        fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
-            "The flag 'progress' should be greater than 0.",
-        ))
+        fmt.Println(
+            ERROR_MESSAGE_TEMPLATE.Render("The flag 'progress' should be greater than 0."),
+        )
     }
 
     mediaUpdate := internal.NewMediaUpdate()
     err := mediaUpdate.Get(false, mediaId, progress, "", "")
 
     if err != nil {
-        fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
-            "Some error happened. please try again...",
-        ))
+        ErrorMessage(err.Error())
     }
     fmt.Println(
         SUCCESS_MESSAGE_TEMPLATE.Render(
@@ -42,9 +40,9 @@ var mediaUpdateCmd = &cobra.Command{
     Run: func(cmd *cobra.Command, args []string) {
         id, err := strconv.Atoi(args[0])
         if err != nil {
-            fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
-                "Invalid media id. please provide a valid one...",
-            ))
+            fmt.Println(
+                ERROR_MESSAGE_TEMPLATE.Render("Invalid media id. please provide a valid one..."),
+            )
         }
         handleUpdate(id)
     },

@@ -16,13 +16,18 @@ var pageSize int
 var searchMediaType string
 
 func getMediaSearch(searchQuery string) {
+    CheckIfTokenExists()
+    
     if pageSize < 0 || pageSize > 50 {
         fmt.Println("page count must be lesser than 50 and greater than 0")
         os.Exit(0)
     }
 
     mediaSearch := internal.NewMediaSearch()
-    mediaSearch.Get(searchQuery, searchMediaType, pageSize)
+    err := mediaSearch.Get(searchQuery, searchMediaType, pageSize)
+    if err != nil {
+        ErrorMessage(err.Error())
+    }
     rows := [][]string{}
 
     for _, i := range mediaSearch.Data.Page.Media {

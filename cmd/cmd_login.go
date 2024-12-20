@@ -2,7 +2,6 @@ package cmd
 
 import (
     "fmt"
-    "os"
 
     "github.com/CosmicPredator/chibi/internal"
     "github.com/spf13/cobra"
@@ -21,13 +20,12 @@ func handleLoginCommand() {
     fmt.Scanln(&code)
 
     if code == "" {
-        fmt.Println("Please provide a valid code")
-        os.Exit(0)
+        ErrorMessage("Please provide a valid token")
     }
 
     err := authRequest.Login(code)
     if err != nil {
-        println(err)
+        ErrorMessage(err.Error())
     }
     fmt.Println("Login Successful")
 }

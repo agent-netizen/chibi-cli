@@ -1,0 +1,23 @@
+name: Build (Multiple Arch)
+
+on:
+    push:
+        branches: [ develop ]
+
+jobs:
+  GoBuild:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout 
+              uses: actions/checkout@v4
+            
+            - name: Run Makefile
+              run: make
+            
+            - name: Upload Installer
+              uses: actions/upload-artifact@v4
+              with: 
+                name: release-builds
+                path: build/
+

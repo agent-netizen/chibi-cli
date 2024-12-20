@@ -2,7 +2,6 @@ package cmd
 
 import (
     "fmt"
-    "os"
     "strconv"
 
     "github.com/CosmicPredator/chibi/internal"
@@ -14,6 +13,8 @@ import (
 var listMediaType string
 
 func handleLs() {
+    CheckIfTokenExists()
+    
     var mediaType string
 
     switch listMediaType {
@@ -26,17 +27,11 @@ func handleLs() {
     mediaList := internal.NewMediaList()
     err := mediaList.Get(mediaType)
     if err != nil {
-        fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
-            "Some error happened, please try again...",
-        ))
-        os.Exit(0)
+        ErrorMessage(err.Error())
     }
 
     if len(mediaList.Data.MediaListCollection.Lists) == 0 {
-        fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
-            "No entries found, go add some :)",
-        ))
-        os.Exit(0)
+        ErrorMessage(err.Error())
     }
 
     rows := [][]string{}

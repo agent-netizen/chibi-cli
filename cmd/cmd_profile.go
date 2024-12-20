@@ -10,10 +10,11 @@ import (
 )
 
 func getUserProfile() {
+    CheckIfTokenExists()
     profile := internal.NewProfile()
     err := profile.Get()
     if err != nil {
-        panic(err)
+        ErrorMessage(err.Error())
     }
 
     keyStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FF79C6"))
