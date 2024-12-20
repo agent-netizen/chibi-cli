@@ -37,7 +37,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with: 
                 name: debian
-                path: build/chibi_debain.deb
+                path: build/chibi_debian.deb
             
             - name: Upload Linux
               uses: actions/upload-artifact@v4
