@@ -18,6 +18,7 @@ clean:
 	mkdir ${BUILD_DIR}
 
 compile:
+	go mod tidy
 	GOARCH=amd64 GOOS=darwin go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${APPLE_INTEL_BIN}
 	GOARCH=arm64 GOOS=darwin go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${APPLE_SILICON_BIN}
 	GOARCH=amd64 GOOS=windows go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${WIN_BIN}.exe
