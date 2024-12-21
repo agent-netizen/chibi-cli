@@ -33,14 +33,14 @@ This section provides the quickest way to get started with chibi-cli. For detail
 
 - Type in `./chibi` and you are in!
 
-    > [!NOTE]
-    > For windows, you may type `./chibi.exe` (in powershell).
+> [!NOTE]
+> For windows, you may type `./chibi.exe` (in powershell).
 
-    > [!NOTE]
-    > For linux, make the binary executable by the following command,
-    >    ```sh
-    >    $ chmod +x ./chibi
-    >    ```
+> [!NOTE]
+> For linux, make the binary executable by the following command,
+>    ```sh
+>    $ chmod +x ./chibi
+>    ```
 
 ## Documentation
 WIP 😁
