@@ -52,9 +52,9 @@ func handleMediaAdd(mediaId int) {
 }
 
 var mediaAddCmd = &cobra.Command{
-	Use: "add [id]",
+	Use:   "add [id]",
 	Short: "Add a media to your list",
-	Args: cobra.ExactArgs(1),
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		mediaId, err := strconv.Atoi(args[0])
 		if err != nil {

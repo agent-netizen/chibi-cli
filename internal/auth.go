@@ -1,88 +1,88 @@
 package internal
 
 import (
-    "bytes"
-    "encoding/json"
-    "fmt"
-    "io"
-    "net/http"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 
-    "github.com/CosmicPredator/chibi/types"
+	"github.com/CosmicPredator/chibi/types"
 )
 
 type AuthRequest struct{}
 
 func (a AuthRequest) GetAuthURL() string {
-    return fmt.Sprintf(
-        "https://anilist.co/api/v2/oauth/authorize?client_id=%v&response_type=token",
-        CLIENT_ID,
-    )
+	return fmt.Sprintf(
+		"https://anilist.co/api/v2/oauth/authorize?client_id=%v&response_type=token",
+		CLIENT_ID,
+	)
 }
 
 func (a AuthRequest) Login(authCode string) error {
-    if err := saveAccessToken(authCode); err != nil {
-        return err
-    }
+	if err := saveAccessToken(authCode); err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func saveAccessToken(authCode string) error {
-    client := NewAnilistClient()
-    tokenConfig := types.NewTokenConfig()
-    tokenConfig.AccessToken = authCode
+	client := NewAnilistClient()
+	tokenConfig := types.NewTokenConfig()
+	tokenConfig.AccessToken = authCode
 
-    query :=
-        `query {
+	query :=
+		`query {
         Viewer {
             id
             name
         }
     }`
-    requestData, err := json.Marshal(map[string]string{"query": query})
-    if err != nil {
-        return err
-    }
+	requestData, err := json.Marshal(map[string]string{"query": query})
+	if err != nil {
+		return err
+	}
 
-    req, err := http.NewRequest("POST", client.ApiUrl, bytes.NewBuffer(requestData))
-    if err != nil {
-        return err
-    }
-    req.Header.Set("Content-Type", "application/json")
-    req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", authCode))
+	req, err := http.NewRequest("POST", client.ApiUrl, bytes.NewBuffer(requestData))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", authCode))
 
-    response, err := client.HttpClient.Do(req)
-    if err != nil {
-        return err
-    }
-    defer response.Body.Close()
+	response, err := client.HttpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
 
-    responseBytes, err := io.ReadAll(response.Body)
-    if err != nil {
-        return err
-    }
+	responseBytes, err := io.ReadAll(response.Body)
+	if err != nil {
+		return err
+	}
 
-    var responseData struct {
-        Data struct {
-            Viewer struct {
-                Id   int    `json:"id"`
-                Name string `json:"name"`
-            } `json:"Viewer"`
-        } `json:"data"`
-    }
+	var responseData struct {
+		Data struct {
+			Viewer struct {
+				Id   int    `json:"id"`
+				Name string `json:"name"`
+			} `json:"Viewer"`
+		} `json:"data"`
+	}
 
-    err = json.Unmarshal(responseBytes, &responseData)
-    if err != nil {
-        return err
-    }
+	err = json.Unmarshal(responseBytes, &responseData)
+	if err != nil {
+		return err
+	}
 
-    tokenConfig.Username = responseData.Data.Viewer.Name
-    tokenConfig.UserId = responseData.Data.Viewer.Id
-    tokenConfig.FlushToJsonFile()
+	tokenConfig.Username = responseData.Data.Viewer.Name
+	tokenConfig.UserId = responseData.Data.Viewer.Id
+	tokenConfig.FlushToJsonFile()
 
-    return nil
+	return nil
 }
 
 func NewAuthRequest() *AuthRequest {
-    return &AuthRequest{}
+	return &AuthRequest{}
 }

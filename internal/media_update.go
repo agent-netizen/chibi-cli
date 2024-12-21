@@ -12,7 +12,7 @@ import (
 )
 
 func getTotalEps(mediaId int) (int, error) {
-    query := `query ($id: Int) {
+	query := `query ($id: Int) {
         Media(id: $id) {
             episodes
             chapters
@@ -20,123 +20,123 @@ func getTotalEps(mediaId int) (int, error) {
         }
     }`
 
-    var reponseData struct {
-        Data struct {
-            Media struct {
-                Episodes int `json:"episodes"`
-                Chapters int `json:"chapters"`
-                Type string `json:"type"`           
-            } `json:"media"`
-        } `json:"data"`
-    }
+	var reponseData struct {
+		Data struct {
+			Media struct {
+				Episodes int    `json:"episodes"`
+				Chapters int    `json:"chapters"`
+				Type     string `json:"type"`
+			} `json:"media"`
+		} `json:"data"`
+	}
 
-    anilistClient := NewAnilistClient()
-    err := anilistClient.ExecuteGraqhQL(
-        query,
-        map[string]interface{} {
-            "id": mediaId,
-        },
-        &reponseData,
-    )
+	anilistClient := NewAnilistClient()
+	err := anilistClient.ExecuteGraqhQL(
+		query,
+		map[string]interface{}{
+			"id": mediaId,
+		},
+		&reponseData,
+	)
 
-    if err != nil {
-        return 0, err
-    }
+	if err != nil {
+		return 0, err
+	}
 
-    if reponseData.Data.Media.Type == "ANIME" {
-        return reponseData.Data.Media.Episodes, nil
-    } else {
-        return reponseData.Data.Media.Chapters, nil
-    }
+	if reponseData.Data.Media.Type == "ANIME" {
+		return reponseData.Data.Media.Episodes, nil
+	} else {
+		return reponseData.Data.Media.Chapters, nil
+	}
 }
 
 type updateMediaFields struct {
-    CompletedAtDate int
-    CompletedAtMonth int
-    CompletedAtYear int
-    Notes string
-    Score float32    
+	CompletedAtDate  int
+	CompletedAtMonth int
+	CompletedAtYear  int
+	Notes            string
+	Score            float32
 }
 
 func updateMediaEntry() (*updateMediaFields, error) {
-    mediaFields := &updateMediaFields{}
-    currDate := fmt.Sprintf("%d/%d/%d\n", time.Now().Day(), time.Now().Month(), time.Now().Year())
-    var scoreString string
+	mediaFields := &updateMediaFields{}
+	currDate := fmt.Sprintf("%d/%d/%d\n", time.Now().Day(), time.Now().Month(), time.Now().Year())
+	var scoreString string
 
-    huh.NewForm(
-        huh.NewGroup(
-            huh.NewInput().
-                Title("Date of completion").
-                Value(&currDate).
-                Description("Date should be in format DD/MM/YYYY").
-                Validate(func(s string) error {
-                    layout := "02/01/2006"
-                    _, err := time.Parse(layout, strings.TrimSpace(s))
-                    return err
-                }),
-        ),
-        huh.NewGroup(
-            huh.NewText().
-                Title("Notes").
-                Description("Note: you can add multiple lines").
-                Value(&mediaFields.Notes),
-        ),
-        huh.NewGroup(
-            huh.NewInput().
-                Title("Score").
-                Description("If your score is in emoji, type 1 for 😞, 2 for 😐 and 3 for 😊").
-                Prompt("> ").
-                Validate(func(s string) error {
-                    _, err := strconv.ParseFloat(s, 64)
-                    return err
-                }).
-                Value(&scoreString),
-        ),
-    ).Run()
-    completedDate, err := time.Parse("02/01/2006", strings.TrimSpace(currDate))
-    if err != nil {
-        return nil, err
-    }
-    scoreFloat, err := strconv.ParseFloat(scoreString, 32)
-    if err != nil {
-        return nil, err
-    }
+	huh.NewForm(
+		huh.NewGroup(
+			huh.NewInput().
+				Title("Date of completion").
+				Value(&currDate).
+				Description("Date should be in format DD/MM/YYYY").
+				Validate(func(s string) error {
+					layout := "02/01/2006"
+					_, err := time.Parse(layout, strings.TrimSpace(s))
+					return err
+				}),
+		),
+		huh.NewGroup(
+			huh.NewText().
+				Title("Notes").
+				Description("Note: you can add multiple lines").
+				Value(&mediaFields.Notes),
+		),
+		huh.NewGroup(
+			huh.NewInput().
+				Title("Score").
+				Description("If your score is in emoji, type 1 for 😞, 2 for 😐 and 3 for 😊").
+				Prompt("> ").
+				Validate(func(s string) error {
+					_, err := strconv.ParseFloat(s, 64)
+					return err
+				}).
+				Value(&scoreString),
+		),
+	).Run()
+	completedDate, err := time.Parse("02/01/2006", strings.TrimSpace(currDate))
+	if err != nil {
+		return nil, err
+	}
+	scoreFloat, err := strconv.ParseFloat(scoreString, 32)
+	if err != nil {
+		return nil, err
+	}
 
-    mediaFields.CompletedAtDate = completedDate.Day()
-    mediaFields.CompletedAtMonth = int(completedDate.Month())
-    mediaFields.CompletedAtYear = completedDate.Year()
-    mediaFields.Score = float32(scoreFloat)
+	mediaFields.CompletedAtDate = completedDate.Day()
+	mediaFields.CompletedAtMonth = int(completedDate.Month())
+	mediaFields.CompletedAtYear = completedDate.Year()
+	mediaFields.Score = float32(scoreFloat)
 
-    return mediaFields, nil
+	return mediaFields, nil
 }
 
 type MediaUpdate struct {
-    Data struct {
-        SaveMediaListEntry struct {
-            MediaId int `json:"mediaId"`
-        } `json:"SaveMediaListEntry"`
-    } `json:"data"`
+	Data struct {
+		SaveMediaListEntry struct {
+			MediaId int `json:"mediaId"`
+		} `json:"SaveMediaListEntry"`
+	} `json:"data"`
 }
 
 func (mu *MediaUpdate) Get(isMediaAdd bool, mediaId int, progress int, status string, startDate string) error {
-    if status == "" {
-        status = "COMPLETED"
-    }
+	if status == "" {
+		status = "COMPLETED"
+	}
 
-    total, err := getTotalEps(mediaId)
-    if err != nil {
-        return err
-    }
+	total, err := getTotalEps(mediaId)
+	if err != nil {
+		return err
+	}
 
-    if progress > total {
-        fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
-            fmt.Sprintf("Entered value is greater than total episodes / chapters, which is %d", total),
-        ))
-        os.Exit(0)
-    }
+	if progress > total {
+		fmt.Println(lipgloss.NewStyle().Foreground(lipgloss.Color("#FF0000")).Render(
+			fmt.Sprintf("Entered value is greater than total episodes / chapters, which is %d", total),
+		))
+		os.Exit(0)
+	}
 
-    mutation := 
-    `mutation(
+	mutation :=
+		`mutation(
         $id: Int, 
         $progress: Int,
         $score: Float,
@@ -170,77 +170,77 @@ func (mu *MediaUpdate) Get(isMediaAdd bool, mediaId int, progress int, status st
         }
     }`
 
-    if isMediaAdd {
-        variables := map[string]interface{} {
-            "id": mediaId,
-            "status": status,
-        }
+	if isMediaAdd {
+		variables := map[string]interface{}{
+			"id":     mediaId,
+			"status": status,
+		}
 
-        if startDate != "" {
-            startDateRaw, err := time.Parse("02/01/2006", startDate)
-            if err != nil {
-                return err
-            }
+		if startDate != "" {
+			startDateRaw, err := time.Parse("02/01/2006", startDate)
+			if err != nil {
+				return err
+			}
 
-            if status == "CURRENT" {
-                variables["sDate"] = startDateRaw.Day()
-                variables["sMonth"] = int(startDateRaw.Month())
-                variables["sYear"] = startDateRaw.Year()
-            }
-        }
+			if status == "CURRENT" {
+				variables["sDate"] = startDateRaw.Day()
+				variables["sMonth"] = int(startDateRaw.Month())
+				variables["sYear"] = startDateRaw.Year()
+			}
+		}
 
-        err = NewAnilistClient().ExecuteGraqhQL(
-            mutation,
-            variables,
-            &mu,
-        )
-        return err
-    }
+		err = NewAnilistClient().ExecuteGraqhQL(
+			mutation,
+			variables,
+			&mu,
+		)
+		return err
+	}
 
-    var canEditList bool = false
+	var canEditList bool = false
 
-    if progress == total {
-        huh.NewConfirm().
-            Title("Seems like you completed the anime/manga. Do you want to mark this as completed?").
-            Affirmative("Yes!").
-            Negative("No").
-            Value(&canEditList).
-            Run()
-    }
+	if progress == total {
+		huh.NewConfirm().
+			Title("Seems like you completed the anime/manga. Do you want to mark this as completed?").
+			Affirmative("Yes!").
+			Negative("No").
+			Value(&canEditList).
+			Run()
+	}
 
-    if canEditList {
-        mediaFields, err := updateMediaEntry()
-        if err != nil {
-            return err
-        }
+	if canEditList {
+		mediaFields, err := updateMediaEntry()
+		if err != nil {
+			return err
+		}
 
-        err = NewAnilistClient().ExecuteGraqhQL(
-            mutation,
-            map[string]interface{} {
-                "id": mediaId,
-                "progress": progress,
-                "score": mediaFields.Score,
-                "notes": mediaFields.Notes,
-                "cDate": mediaFields.CompletedAtDate,
-                "cMonth": mediaFields.CompletedAtMonth,
-                "cYear": mediaFields.CompletedAtYear,
-            },
-            &mu,
-        )
-        return err
-    }
+		err = NewAnilistClient().ExecuteGraqhQL(
+			mutation,
+			map[string]interface{}{
+				"id":       mediaId,
+				"progress": progress,
+				"score":    mediaFields.Score,
+				"notes":    mediaFields.Notes,
+				"cDate":    mediaFields.CompletedAtDate,
+				"cMonth":   mediaFields.CompletedAtMonth,
+				"cYear":    mediaFields.CompletedAtYear,
+			},
+			&mu,
+		)
+		return err
+	}
 
-    err = NewAnilistClient().ExecuteGraqhQL(
-        mutation,
-        map[string]interface{} {
-            "id": mediaId,
-            "progress": progress,
-        },
-        &mu,
-    )
-    return err
+	err = NewAnilistClient().ExecuteGraqhQL(
+		mutation,
+		map[string]interface{}{
+			"id":       mediaId,
+			"progress": progress,
+		},
+		&mu,
+	)
+	return err
 }
 
 func NewMediaUpdate() *MediaUpdate {
-    return &MediaUpdate{}
+	return &MediaUpdate{}
 }

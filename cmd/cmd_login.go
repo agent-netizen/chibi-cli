@@ -1,39 +1,39 @@
 package cmd
 
 import (
-    "fmt"
+	"fmt"
 
-    "github.com/CosmicPredator/chibi/internal"
-    "github.com/spf13/cobra"
+	"github.com/CosmicPredator/chibi/internal"
+	"github.com/spf13/cobra"
 )
 
 func handleLoginCommand() {
-    var code string
+	var code string
 
-    authRequest := internal.NewAuthRequest()
-    fmt.Printf(
-        "Open the below link in browser to login with anilist: \n\n\n%s",
-        authRequest.GetAuthURL(),
-    )
-    fmt.Println("\n\n\nCopy the code from the browser and enter it below:")
-    fmt.Print("Enter code: ")
-    fmt.Scanln(&code)
+	authRequest := internal.NewAuthRequest()
+	fmt.Printf(
+		"Open the below link in browser to login with anilist: \n\n\n%s",
+		authRequest.GetAuthURL(),
+	)
+	fmt.Println("\n\n\nCopy the code from the browser and enter it below:")
+	fmt.Print("Enter code: ")
+	fmt.Scanln(&code)
 
-    if code == "" {
-        ErrorMessage("Please provide a valid token")
-    }
+	if code == "" {
+		ErrorMessage("Please provide a valid token")
+	}
 
-    err := authRequest.Login(code)
-    if err != nil {
-        ErrorMessage(err.Error())
-    }
-    fmt.Println("Login Successful")
+	err := authRequest.Login(code)
+	if err != nil {
+		ErrorMessage(err.Error())
+	}
+	fmt.Println("Login Successful")
 }
 
 var loginCmd = &cobra.Command{
-    Use:   "login",
-    Short: "Login with anilist",
-    Run: func(cmd *cobra.Command, args []string) {
-        handleLoginCommand()
-    },
+	Use:   "login",
+	Short: "Login with anilist",
+	Run: func(cmd *cobra.Command, args []string) {
+		handleLoginCommand()
+	},
 }
