@@ -30,22 +30,22 @@ jobs:
       - name: Tree Dir
         run: tree
   
-      # - name: Create Release
-      #   id: create-release
-      #   uses: comnoco/create-release-action@v2.0.5
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ env.version }}
-      #     release_name: Version ${{ env.version }} 🔖
-      #     body: $(cat CHANGELOG.md)
-      #     draft: false
-      #     prerelease: false
+      - name: Create Release
+        id: create-release
+        uses: comnoco/create-release-action@v2.0.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.version }}
+          release_name: Version ${{ env.version }} 🔖
+          body: $(cat CHANGELOG.md)
+          draft: false
+          prerelease: false
         
-      # - name: Upload Artifacts to Release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   uses: alexellis/upload-assets@0.4.1
-      #   with:
-      #     asset_paths: '[ "./build/*" ]'
+      - name: Upload Artifacts to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: alexellis/upload-assets@0.4.1
+        with:
+          asset_paths: '[ "./build/*" ]'
       
