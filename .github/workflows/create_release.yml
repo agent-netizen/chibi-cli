@@ -27,6 +27,13 @@ jobs:
           echo "Current version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
       
+      - name: Read Changelog
+        id: read-changelog
+        run: |
+          CHANGELOG=$(cat CHANGELOG.md)
+          echo "Changelog: $CHANGELOG"
+          echo "changelog=$CHANGELOG" >> $GITHUB_ENV
+      
       - name: Tree Dir
         run: tree
   
@@ -38,7 +45,7 @@ jobs:
         with:
           tag_name: v${{ env.version }}
           release_name: Version ${{ env.version }} 🔖
-          body: $(cat CHANGELOG.md)
+          body: ${{ env.changelog }}
           draft: false
           prerelease: false
         
