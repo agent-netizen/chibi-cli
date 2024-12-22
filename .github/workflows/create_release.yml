@@ -26,6 +26,9 @@ jobs:
           VERSION=$(cat version.txt)
           echo "Current version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
+      
+      - name: Tree Dir
+        run: tree
   
       # - name: Create Release
       #   id: create-release
