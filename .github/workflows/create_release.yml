@@ -1,0 +1,39 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_release:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: download-artifacts
+
+      - name: Read Version
+        id: read_version
+        run: |
+          VERSION=$(cat version.txt)
+          echo "Current version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create-release
+        uses: comnoco/create-release-action@v2.0.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.version }}
+          release_name: Version ${{ env.version }} 🔖
+          body: $(cat CHANGELOG.md)
+          draft: false
+          prerelease: false
+      
+      - name: Upload Artifacts to Release
+        uses: alexellis/upload-assets@0.4.1
+        with:
+          asset_paths: '[ "build/*" ]'
