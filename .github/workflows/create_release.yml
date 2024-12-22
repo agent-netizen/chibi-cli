@@ -36,16 +36,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.version }}
+          tag_name: v${{ env.version }}
           release_name: Version ${{ env.version }} 🔖
           body: $(cat CHANGELOG.md)
           draft: false
           prerelease: false
         
       - name: Upload Artifacts to Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: alexellis/upload-assets@0.4.1
+        uses: AButler/upload-release-assets@v3.0
         with:
-          asset_paths: '[ "./build/*" ]'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: v${{ env.version }}
+          files: "build/*"
       
