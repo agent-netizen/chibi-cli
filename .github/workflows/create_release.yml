@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  release:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,29 +19,14 @@ jobs:
         with: 
           name: build_artifacts
           path: build
-
-  create_release:
-    needs: build
-    permissions: write-all
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          name: build_artifacts
-
+      
       - name: Read Version
         id: read_version
         run: |
           VERSION=$(cat version.txt)
           echo "Current version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
-
+  
       - name: Create Release
         id: create-release
         uses: comnoco/create-release-action@v2.0.5
@@ -52,10 +38,11 @@ jobs:
           body: $(cat CHANGELOG.md)
           draft: false
           prerelease: false
-      
+        
       - name: Upload Artifacts to Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: alexellis/upload-assets@0.4.1
         with:
           asset_paths: '[ "build/*" ]'
+      
