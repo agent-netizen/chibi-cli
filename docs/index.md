@@ -6,7 +6,7 @@ hero:
   name: "Chibi for AniList"
   tagline: A lightweight anime & manga tracker CLI app powered by AniList.
   image: 
-    src: assets/term_gif.gif
+    src: https://vhs.charm.sh/vhs-4o1iqUYYSVr7QIO5m9Q5nX.gif
     alt: Terminal GIF
   actions:
     - theme: brand
