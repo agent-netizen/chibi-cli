@@ -37,6 +37,8 @@ jobs:
           prerelease: false
       
       - name: Upload Artifacts to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: alexellis/upload-assets@0.4.1
         with:
           asset_paths: '[ "build/*" ]'
