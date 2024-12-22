@@ -2,3 +2,5 @@ go.sum
 build/
 .vscode/
 casette.tape
+docs/node_modules
+docs/.vitepress/cache
