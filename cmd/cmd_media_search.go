@@ -40,7 +40,7 @@ func getMediaSearch(searchQuery string) {
 	}
 
 	// get size of terminal
-	tw, _, err := term.GetSize((os.Stdin.Fd()))
+	tw, _, err := term.GetSize((os.Stdout.Fd()))
 	if err != nil {
 		ErrorMessage(err.Error())
 	}

@@ -1,4 +1,3 @@
-### Initial Release 🚀
+### Critical Hotfix 🚑️
 
-Thanks for downloading chibi ❤️.
-If you find any bugs, please raise an issue on github.
+Fixed some tables not rendering and throwing errors in Windows.
