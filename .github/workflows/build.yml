@@ -1,46 +1,60 @@
 name: Build (Multiple Arch)
 
 on:
-    push:
-        branches: [ develop ]
+  push:
+    branches: [ develop ]
+  pull_request: 
+    branches: [ develop ]
+  workflow_dispatch:
 
 jobs:
-  GoBuild:
-        runs-on: ubuntu-latest
+  build:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        steps:
-            - name: Checkout 
-              uses: actions/checkout@v4
-            
-            - name: Run Makefile
-              run: make
-            
-            - name: Upload win64
-              uses: actions/upload-artifact@v4
-              with: 
-                name: win64
-                path: build/chibi_x64_win.exe
-            
-            - name: Upload Apple Silicon
-              uses: actions/upload-artifact@v4
-              with: 
-                name: apple_silicon
-                path: build/chibi_darwin_silicon
+      - name: Run Make
+        run: make
 
-            - name: Upload Apple Intel
-              uses: actions/upload-artifact@v4
-              with: 
-                name: apple_intel
-                path: build/chibi_darwin_intel
-                
-            - name: Upload Debian
-              uses: actions/upload-artifact@v4
-              with: 
-                name: debian
-                path: build/chibi_debian.deb
-            
-            - name: Upload Linux
-              uses: actions/upload-artifact@v4
-              with: 
-                name: linux
-                path: build/chibi_x64_linux
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with: 
+          name: build
+          path: build/*
+
+  create_release:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: download-artifacts
+
+      - name: Read Version
+        id: read_version
+        run: |
+          VERSION=$(cat version.txt)
+          echo "Current version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create-release
+        uses: comnoco/create-release-action@v2.0.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.version }}
+          release_name: Version ${{ env.version }} 🔖
+          body: $(cat CHANGELOG.md)
+          draft: false
+          prerelease: false
+      
+      - name: Upload Artifacts to Release
+        uses: alexellis/upload-assets@0.4.1
+        with:
+          asset_paths: '[ "build/*" ]'

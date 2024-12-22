@@ -1,13 +1,14 @@
-VERSION=1.0
+VERSION=1.0.0
 BINARY_NAME=chibi
 BUILD_DIR=build
 DEB_PATH=chibi_debian
 LDFLAGS="-s -w"
+VERSION := $(shell cat version.txt)
 
-LINUX_BIN=${BINARY_NAME}_x64_linux
-WIN_BIN=${BINARY_NAME}_x64_win
-APPLE_INTEL_BIN=${BINARY_NAME}_darwin_intel
-APPLE_SILICON_BIN=${BINARY_NAME}_darwin_silicon
+LINUX_BIN=${BINARY_NAME}_linux_amd64
+WIN_BIN=${BINARY_NAME}_windows_amd64.exe
+APPLE_INTEL_BIN=${BINARY_NAME}_darwin_amd64
+APPLE_SILICON_BIN=${BINARY_NAME}_darwin_arm64
 
 .PHONY: all
 
@@ -21,7 +22,7 @@ compile:
 	go mod tidy
 	GOARCH=amd64 GOOS=darwin go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${APPLE_INTEL_BIN}
 	GOARCH=arm64 GOOS=darwin go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${APPLE_SILICON_BIN}
-	GOARCH=amd64 GOOS=windows go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${WIN_BIN}.exe
+	GOARCH=amd64 GOOS=windows go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${WIN_BIN}
 	GOARCH=amd64 GOOS=linux go build -ldflags=${LDFLAGS} -v -o ${BUILD_DIR}/${LINUX_BIN}
 
 pack_deb:
@@ -42,6 +43,6 @@ pack_deb:
 	@echo "Homepage: https://github.com/CosmicPredator/chibi-cli" >> ${DEB_PATH}/DEBIAN/control
 
 	dpkg-deb --build ${DEB_PATH}
-	mv chibi_debian.deb ${BUILD_DIR}/chibi_debian.deb
+	mv chibi_debian.deb ${BUILD_DIR}/chibi_${VERSION}_amd64.deb
 
 	rm -rf ${DEB_PATH}/

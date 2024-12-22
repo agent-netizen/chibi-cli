@@ -45,6 +45,12 @@ This section provides the quickest way to get started with chibi-cli. For detail
 ## Documentation
 WIP 😁
 
+## Contributing
+Contributions are heartily welcomed...!
+
+Please refer to the [pull request guide](https://github.com/CosmicPredator/chibi-cli/blob/develop/.github/PULL_REQUEST_TEMPLATE.md) 
+before creating a pull request. 
+
 ## Special Thanks
 This project is not possible without the following libraries,
 
