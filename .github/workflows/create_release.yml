@@ -17,7 +17,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with: 
           name: build_artifacts
-          path: build/*
+          path: build
 
   create_release:
     needs: build
@@ -58,4 +58,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: alexellis/upload-assets@0.4.1
         with:
-          asset_paths: '[ "chibi_darwin_amd64", "chibi_darwin_arm64", "chibi_linux_amd64", "chibi_windows_amd64.exe", "chibi_*_amd64.deb" ]'
+          asset_paths: '[ "build/*" ]'
