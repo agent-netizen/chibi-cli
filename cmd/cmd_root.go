@@ -15,6 +15,7 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.AddCommand(
+		versionCmd,
 		loginCmd,
 		profileCmd,
 		mediaSearchCmd,
