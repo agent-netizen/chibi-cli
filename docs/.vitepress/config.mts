@@ -30,7 +30,8 @@ export default defineConfig({
       {
         text: "CLI Guide",
         items: [
-          { text: "help", link: "/02_cli_guide/help" }
+          { text: "help", link: "/02_cli_guide/help" },
+          { text: "login", link: "/02_cli_guide/login" }
         ]
       }
     ],

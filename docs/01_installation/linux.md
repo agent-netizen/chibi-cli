@@ -10,7 +10,7 @@ For Ubuntu/Debian-based distros, you can install Chibi directly from the `.deb` 
 $ sudo dpkg -i chibi_1.0.0_amd64.deb
 ```
 
-## Other Distors
+## Other Distros
 For other distros, you can download the latest binary (`chibi_1.0.0_linux_amd64`) from the [Releases](https://github.com/CosmicPredator/chibi-cli/releases/latest). After downloading, open a terminal in the directory where you downloaded Chibi and follow these instructions,
 
 1. Rename the binary to `chibi`,
