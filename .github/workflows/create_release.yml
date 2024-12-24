@@ -52,5 +52,5 @@ jobs:
         uses: AButler/upload-release-assets@v3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          release-tag: v${{ env.tag }}
+          release-tag: ${{ env.tag }}
           files: "build/*"
