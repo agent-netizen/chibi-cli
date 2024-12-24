@@ -4,7 +4,7 @@ lang: en-US
 ---
 
 # The `help` Command
-You can use `help` command to know about the usage of a specific command. It shows a command's available args, flags and a small info about what that command does. For example:
+The `help` command provides information about the usage of a specific command, including available arguments, flags, and a brief description of its functionality. For example:
 
 ```shell
 $ chibi --help
@@ -30,16 +30,16 @@ $ chibi --help
 ```
 
 ::: info NOTE
-The above help command text varies from your output as we may add additional commands and flags in the future.
+Your output might _differ_ from the example above as new commands and flags may be added in future updates
 :::
 
-Alternatively, you can also use the **shorthand** syntax to call the same command:
+You can also use the shorthand syntax for the same command:
 ```shell
 $ chibi -h
 ```
 
-## Command specific help
-The help command can be used not only on the top level, but also to individual commands. In other words, you can get the help text of a specific command using the syntax `chibi <command> --help`. For example;
+## Command-Specific help
+The `help` command can also provide details about individual commands. Use the syntax `chibi <command> --help` to get more specific information. For example:
 ```shell
 $ chibi profile --help
 # Get's your AniList profile (requires login)
@@ -51,9 +51,8 @@ $ chibi profile --help
 #   -h, --help   help for profile
 ```
 
-## Shorthand Syntax
-The help command can be called on various formats. The following commands all does the same thing, which is printing the help text:
-
+## Shorthand Syntax Options
+The `help` command can be invoked in various formats, all of which work the same way. For instance:
 ```shell
 # All works the same
 $ chibi profile --help
