@@ -31,7 +31,12 @@ export default defineConfig({
         text: "CLI Guide",
         items: [
           { text: "help", link: "/02_cli_guide/help" },
-          { text: "login", link: "/02_cli_guide/login" }
+          { text: "login", link: "/02_cli_guide/login" },
+          { text: "profile", link: "/02_cli_guide/profile" },
+          { text: "ls", link: "/02_cli_guide/ls" },
+          { text: "search", link: "/02_cli_guide/search" },
+          { text: "add", link: "/02_cli_guide/add" },
+          { text: "update", link: "/02_cli_guide/update" }
         ]
       }
     ],

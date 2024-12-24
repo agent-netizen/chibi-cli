@@ -12,10 +12,13 @@ Invoke the `login` command by running the following:
 $ chibi login
 # Open the below link in browser to login with anilist: 
 
-# https://anilist.co/api/v2/oauth/authorize?client_id=4593&response_type=token
+# ╭──────────────────────────────────────────────────────────────────────────────╮
+# │ https://anilist.co/api/v2/oauth/authorize?client_id=4593&response_type=token │
+# ╰──────────────────────────────────────────────────────────────────────────────╯
 
-# Copy the code from the browser and enter it below:
-# Enter code: 
+# ┃ Paste your token here:                                                            
+# ┃                                                                                   
+# ┃                                                                                   
 ```
 This will display a URL. You can copy and paste this URL into your browser, or simply `Ctrl + Click` the link to open it directly.
 

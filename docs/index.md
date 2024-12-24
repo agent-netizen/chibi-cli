@@ -14,7 +14,7 @@ hero:
       link: /00_getting_started/index
     - theme: alt
       text: CLI Guide
-      link: /getting_started/index
+      link: /02_cli_guide/index
 
 features:
   - title: Ease of use

@@ -17,14 +17,15 @@ $ chibi --help
 # Available Commands:
 #   add         Add a media to your list
 #   help        Help about any command
+#   list        List your current anime/manga list
 #   login       Login with anilist
-#   ls          List your current anime/manga list
 #   profile     Get's your AniList profile (requires login)
 #   search      Search for anime and manga
 #   update      Update a list entry
 
 # Flags:
-#   -h, --help   help for chibi
+#   -h, --help      help for chibi
+#   -v, --version   Prints the version of the app
 
 # Use "chibi [command] --help" for more information about a command.
 ```
