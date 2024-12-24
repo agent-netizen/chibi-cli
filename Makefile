@@ -20,7 +20,10 @@ APPLE_SILICON_BIN=${BINARY_NAME}_${LATEST_TAG}_darwin_arm64
 
 .PHONY: all
 
-all: clean compile pack_deb
+all:
+	echo "Makefile under maintenance :)"
+
+# all: clean compile pack_deb
 
 clean:
 	if [ -d ${BUILD_DIR} ]; then rm -rf ${BUILD_DIR}; fi
