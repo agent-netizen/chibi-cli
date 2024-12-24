@@ -63,7 +63,7 @@ func handleLs() {
 	}
 
 	t := table.New().
-		Border(lipgloss.NormalBorder()).
+		Border(lipgloss.RoundedBorder()).
 		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("99"))).
 		StyleFunc(func(row, col int) lipgloss.Style {
 			// style for table header row
