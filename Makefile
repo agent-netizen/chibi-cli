@@ -1,5 +1,5 @@
 # Use either DEBUG or RELEASE
-BUILD_TYPE=RELEASE
+BUILD_TYPE=DEBUG
 
 BINARY_NAME=chibi
 BUILD_DIR=build
@@ -41,7 +41,7 @@ pack_deb:
 	cp ${BUILD_DIR}/${LINUX_BIN} ${DEB_PATH}/usr/local/bin/chibi
 
 	@echo "Package: chibi" > ${DEB_PATH}/DEBIAN/control
-	@echo "Version: 1.0.0" >> ${DEB_PATH}/DEBIAN/control
+	@echo "Version: ${LATEST_TAG}" >> ${DEB_PATH}/DEBIAN/control
 	@echo "Section: base" >> ${DEB_PATH}/DEBIAN/control
 	@echo "Priority: optional" >> ${DEB_PATH}/DEBIAN/control
 	@echo "Architecture: amd64" >> ${DEB_PATH}/DEBIAN/control
