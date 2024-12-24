@@ -24,7 +24,26 @@ type MediaList struct {
 	} `json:"data"`
 }
 
-func (ml *MediaList) Get(mediaType string) error {
+func parseMediaStatus(status string) string {
+	switch status {
+	case "watching", "reading", "w", "r":
+		return "CURRENT"
+	case "planning", "p":
+		return "PLANNING"
+	case "completed", "c":
+		return "COMPLETED"
+	case "dropped", "d":
+		return "DROPPED"
+	case "paused", "ps":
+		return "PAUSED"
+	case "repeating", "rp":
+		return "REPEATING"
+	default:
+		return "CURRENT"
+	}
+}
+
+func (ml *MediaList) Get(mediaType string, status string) error {
 	anilistClient := NewAnilistClient()
 	tokenConfig := types.NewTokenConfig()
 	err := tokenConfig.ReadFromJsonFile()
@@ -34,8 +53,8 @@ func (ml *MediaList) Get(mediaType string) error {
 	}
 
 	query :=
-		`query($userId: Int, $type: MediaType) {
-        MediaListCollection(userId: $userId, type: $type, status: CURRENT) {
+		`query($userId: Int, $type: MediaType, $status: MediaListStatus) {
+        MediaListCollection(userId: $userId, type: $type, status: $status) {
             lists {
                 entries {
                     progress
@@ -59,6 +78,7 @@ func (ml *MediaList) Get(mediaType string) error {
 		map[string]interface{}{
 			"type":   mediaType,
 			"userId": tokenConfig.UserId,
+			"status": parseMediaStatus(status),
 		},
 		&ml,
 	)

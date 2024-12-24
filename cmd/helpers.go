@@ -22,10 +22,10 @@ func CheckIfTokenExists() {
 }
 
 func ErrorMessage(errorString string) {
-	fmt.Printf(
-		"%s: %s\n",
-		ERROR_MESSAGE_TEMPLATE.Render("An internal error occured"),
-		errorString,
+	fmt.Println(
+		ERROR_MESSAGE_TEMPLATE.Render(
+			fmt.Sprintf("An internal error occured: %s", errorString),
+		),
 	)
 	os.Exit(0)
 }

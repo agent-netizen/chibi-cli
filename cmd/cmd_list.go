@@ -13,6 +13,7 @@ import (
 )
 
 var listMediaType string
+var listStatus string
 
 func handleLs() {
 	CheckIfTokenExists()
@@ -27,13 +28,16 @@ func handleLs() {
 	}
 
 	mediaList := internal.NewMediaList()
-	err := mediaList.Get(mediaType)
+	err := mediaList.Get(mediaType, listStatus)
 	if err != nil {
 		ErrorMessage(err.Error())
 	}
 
 	if len(mediaList.Data.MediaListCollection.Lists) == 0 {
-		ErrorMessage(err.Error())
+		fmt.Println(
+			ERROR_MESSAGE_TEMPLATE.Render("No entires found!"),
+		)
+		os.Exit(0)
 	}
 
 	rows := [][]string{}
@@ -81,8 +85,9 @@ func handleLs() {
 }
 
 var mediaListCmd = &cobra.Command{
-	Use:   "ls",
+	Use:   "list",
 	Short: "List your current anime/manga list",
+	Aliases: []string{ "ls" },
 	Run: func(cmd *cobra.Command, args []string) {
 		handleLs()
 	},
@@ -91,5 +96,8 @@ var mediaListCmd = &cobra.Command{
 func init() {
 	mediaListCmd.Flags().StringVarP(
 		&listMediaType, "type", "t", "anime", "Type of media. for anime, pass 'anime' or 'a', for manga, use 'manga' or 'm'",
+	)
+	mediaListCmd.Flags().StringVarP(
+		&listStatus, "status", "s", "watching", "Status of the media. Can be 'watching/w or reading/r', 'planning/p', 'completed/c', 'dropped/d', 'paused/ps', 'repeating/rp'",
 	)
 }

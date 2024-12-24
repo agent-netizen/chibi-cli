@@ -16,7 +16,7 @@ func handleMediaAdd(mediaId int) {
 	CheckIfTokenExists()
 
 	switch mediaAddStatus {
-	case "watching", "w":
+	case "watching", "reading", "w", "r":
 		mediaAddStatus = "CURRENT"
 	case "planning", "p":
 		mediaAddStatus = "PLANNING"
@@ -26,7 +26,7 @@ func handleMediaAdd(mediaId int) {
 		mediaAddStatus = "DROPPED"
 	case "paused", "ps":
 		mediaAddStatus = "PAUSED"
-	case "repeating", "r":
+	case "repeating", "rp":
 		mediaAddStatus = "REPEATING"
 	default:
 		mediaAddStatus = "CURRENT"
@@ -73,6 +73,6 @@ func init() {
 		"status",
 		"s",
 		"planning",
-		"Status of the media. Can be 'wathcing/w', 'planning/p', 'completed/c', 'dropped/d', 'paused/ps', 'repeating/r'",
+		"Status of the media. Can be 'watching/w or reading/r', 'planning/p', 'completed/c', 'dropped/d', 'paused/ps', 'repeating/rp'",
 	)
 }
