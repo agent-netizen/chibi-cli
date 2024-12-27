@@ -43,7 +43,7 @@ This section provides the quickest way to get started with chibi-cli. For detail
 >    ```
 
 ## Documentation
-WIP 😁
+You can check the docs [here](https://chibi-cli.pages.dev/).
 
 ## Contributing
 Contributions are heartily welcomed...!
