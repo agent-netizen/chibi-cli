@@ -96,7 +96,7 @@ uninstall_binary() {
     if [ "$PLATFORM" == "darwin" ]; then
         CONFIG_DIR="$HOME/Library/Application Support/chibi"
     else
-        CONFIG_DIR="$HOME/.config/chibi"
+        CONFIG_DIR="/home/$SUDO_USER/.config/chibi"
     fi
 
     if [ -d "$CONFIG_DIR" ]; then
